@@ -37,10 +37,11 @@ public class RestClientConfig {
      * Cliente HTTP hacia el microservicio de IA (FastAPI Python).
      */
     @Bean("aiRestClient")
-    RestClient aiRestClient(@Value("${app.ai.base-url}") String baseUrl) {
+    RestClient aiRestClient(RestClient.Builder builder,
+                            @Value("${app.ai.base-url}") String baseUrl) {
         HttpComponentsClientHttpRequestFactory factory =
                 new HttpComponentsClientHttpRequestFactory(buildHttpClient(2, 3));
-        return RestClient.builder()
+        return builder
                 .baseUrl(baseUrl)
                 .requestFactory(factory)
                 .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
@@ -54,11 +55,12 @@ public class RestClientConfig {
      */
     @Bean("vaultRestClient")
     RestClient vaultRestClient(
+            RestClient.Builder builder,
             @Value("${app.vault.base-url}") String baseUrl,
             @Value("${app.vault.auth-token}") String authToken) {
         HttpComponentsClientHttpRequestFactory factory =
                 new HttpComponentsClientHttpRequestFactory(buildHttpClient(3, 5));
-        return RestClient.builder()
+        return builder
                 .baseUrl(baseUrl)
                 .requestFactory(factory)
                 .defaultHeader("X-Auth-Token", authToken)

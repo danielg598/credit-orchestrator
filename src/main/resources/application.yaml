@@ -52,6 +52,20 @@ resilience4j:
         wait-duration: 800ms
 
 # =====================================================================
+#  Observabilidad — tracing distribuido con OpenTelemetry (OTLP)
+#  Para apuntar a un colector gestionado (AWS X-Ray / Azure Monitor):
+#     APP_OTLP_ENDPOINT=http://<collector>:4318/v1/traces
+#  En producción baja el muestreo, p. ej. APP_TRACING_SAMPLING=0.1
+# =====================================================================
+management:
+  tracing:
+    sampling:
+      probability: ${APP_TRACING_SAMPLING:1.0}   # 100% en local; menor en prod
+  otlp:
+    tracing:
+      endpoint: ${APP_OTLP_ENDPOINT:http://localhost:4318/v1/traces}
+
+# =====================================================================
 #  Logging
 # =====================================================================
 logging:
